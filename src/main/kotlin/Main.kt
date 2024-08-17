@@ -1,5 +1,5 @@
-package org.ex
+package pl.wnasilowski
 
 fun main() {
-    println("Hello World!")
-}
+    solutions.containers.run()
+  }

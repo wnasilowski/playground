@@ -10,6 +10,16 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "run",
+            "type": "shell",
+            "command": "bash",
+            "args": ["-c", "gradle run"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }

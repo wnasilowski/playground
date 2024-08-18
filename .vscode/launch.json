@@ -11,6 +11,12 @@
             "projectRoot": "${workspaceFolder}",
             "mainClass": "pl/wnasilowski/MainKt",
             "preLaunchTask": "assemble"
+        },
+        {
+            "name": "Gradle run",
+            "command": "gradle run",
+            "request": "launch",
+            "type": "node-terminal"
         }
     ]
 }

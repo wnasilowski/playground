@@ -1,4 +1,4 @@
-package threesum
+package solutions.threesum
 
 fun run() {
     val solution = Solution()

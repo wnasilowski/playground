@@ -2,7 +2,7 @@ package solutions.longestsubstring
 
 fun run() {
     val solution = Solution()
-    val input = "abcabcbb"
+    val input = "pwwkew"
     println("input: ${input}")
     val result = solution.lengthOfLongestSubstring(input)
     println("result: $result")
@@ -26,8 +26,15 @@ class Solution {
                 right++
             } else {
                 left = existing[s.get(right)]!! + 1
-                right = left
-                existing.clear()
+                val toRemove = mutableListOf<Char>()
+                existing.forEach { key, value -> 
+                    if (value < left) {
+                        toRemove.add(key)
+                    }
+                }
+                toRemove.forEach {
+                    existing.remove(it)
+                }
             }
         }
         return maxLength

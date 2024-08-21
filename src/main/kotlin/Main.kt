@@ -1,5 +1,5 @@
 package pl.wnasilowski
 
 fun main() {
-    solutions.minimumsubarray.run()
+    solutions.longestsubstring.run()
   }

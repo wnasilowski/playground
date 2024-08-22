@@ -1,5 +1,5 @@
 package pl.wnasilowski
 
 fun main() {
-    solutions.removeduplicates.run()
+    solutions.rotateright.run()
   }

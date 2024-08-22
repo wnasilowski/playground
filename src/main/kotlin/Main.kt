@@ -1,5 +1,5 @@
 package pl.wnasilowski
 
 fun main() {
-    solutions.addtwonumbers.run()
+    solutions.removeduplicates.run()
   }

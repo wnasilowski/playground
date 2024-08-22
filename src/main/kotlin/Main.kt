@@ -1,5 +1,5 @@
 package pl.wnasilowski
 
 fun main() {
-    solutions.longestsubstring.run()
+    solutions.addtwonumbers.run()
   }

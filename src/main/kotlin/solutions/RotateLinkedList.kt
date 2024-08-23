@@ -2,8 +2,8 @@ package solutions.rotateright
 
 fun run() {
     val solution = Solution()
-    val input = listOf(1, 2, 3, 4, 5).toLinked()
-    val k = 10
+    val input = listOf(1, 2, 3).toLinked()
+    val k = 4
     println("k: $k input:")
     printList(input)
 
@@ -45,24 +45,42 @@ class ListNode(var `val`: Int) {
 
 class Solution {
     fun rotateRight(head: ListNode?, k: Int): ListNode? {
-        if (head == null || k == 0) {
+        val n = head.listSize()
+        if (n <= 1) {
             return head
         }
+        val effectiveK = k % n
+        if (effectiveK == 0) {
+            return head
+        }
+        val newTailIndex = n - 1 - effectiveK
+        val newHeadIndex = n - effectiveK
+        val nodes = head.findItemsByIndex(listOf(newTailIndex, newHeadIndex, n - 1))
+        nodes[newTailIndex]?.next = null
+        nodes[n - 1]?.next = head
+        return nodes[newHeadIndex]
+    }
 
-        var current = head
-        val arrayList = mutableListOf<ListNode>()
-        while(current != null) {
-            arrayList.add(current)
+    private fun ListNode?.listSize(): Int {
+        var current = this
+        var n = 0
+        while (current != null) {
+            n++
             current = current.next
         }
-        val n = arrayList.size
-        val offset = k % n
-        if (offset == 0 || n == 1) {
-            return head
+        return n
+    }
+    private fun ListNode?.findItemsByIndex(indexes: List<Int>): Map<Int, ListNode> {
+        var current = this
+        var i = 0
+        val result = mutableMapOf<Int, ListNode>()
+        while (current != null) {
+            if (indexes.contains(i)) {
+                result[i] = current
+            }
+            i++
+            current = current.next
         }
-        arrayList[n - offset - 1].next = null
-        arrayList[n-1].next = arrayList[0]
-        val newHeadIndex = n - offset
-        return arrayList[newHeadIndex]
+        return result
     }
 }

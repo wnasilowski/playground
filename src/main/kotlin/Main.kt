@@ -1,5 +1,5 @@
 package pl.wnasilowski
 
 fun main() {
-    solutions.trie.run()
+    solutions.wordsearch.run()
   }

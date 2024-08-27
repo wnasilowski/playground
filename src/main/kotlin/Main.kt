@@ -1,5 +1,5 @@
 package pl.wnasilowski
 
 fun main() {
-    solutions.subsets.run()
+    solutions.subsets2.run()
   }

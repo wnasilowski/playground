@@ -1,7 +1,7 @@
 package solutions.countcompletetree2
 
 fun run() {
-    val input = listOf(1,2,3,4,5,6)
+    val input = listOf(1)
     println("input: $input")
     val nodes = mutableListOf<TreeNode>()
     nodes.add(TreeNode(-1))
@@ -27,10 +27,37 @@ class Solution {
         if (root == null) {
             return 0
         }
-
-        return fullPartSize + elementsInLastLevel
+        val treeHeight = treeHight(root)
+        if (treeHeight == 0) {
+            return 1
+        }
+        val completeSize = Math.pow(2.toDouble(), treeHeight.toDouble() + 1).toInt() - 1
+        val missing = countMissing(root, treeHeight, 0)
+        return completeSize - missing
     }
-    private fun dive(root: TreeNode?, i: Int, elementsCount: MutableMap<Int, Int>) {
+    private fun treeHight(root: TreeNode?): Int {
+        var i = 0
+        var current = root?.left
+        while(current != null) {
+            i++
+            current = current.left
+        }
+        return i
+    }
 
+    private fun countMissing(root: TreeNode, height: Int, i: Int): Int {
+        var res = 0
+        if (i == height - 1) {
+            if (root.right == null) {
+                res++
+            }
+            if (root.left == null) {
+                res++
+            }
+        } else {
+            res += countMissing(root.right!!, height, i+1)
+            res += countMissing(root.left!!, height, i+1)
+        }
+        return res
     }
 }

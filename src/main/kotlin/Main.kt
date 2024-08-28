@@ -1,5 +1,5 @@
 package pl.wnasilowski
 
 fun main() {
-    solutions.maxsumpath.run()
+    solutions.courseschedule.run()
   }

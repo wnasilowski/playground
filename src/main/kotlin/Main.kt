@@ -1,5 +1,5 @@
 package pl.wnasilowski
 
 fun main() {
-    solutions.courseschedule.run()
+    solutions.countcompletetree2.run()
   }

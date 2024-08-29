@@ -9,11 +9,22 @@ fun run() {
     println("result: $result")
 }
 
-private data class CacheInput(
-    val i: Int,
-    val sum: Int, 
-)
-
+class Solution {
+    fun findTargetSumWays(nums: IntArray, target: Int): Int {
+        var count = mutableMapOf<Int, Int>()
+        count[0] = 1
+        nums.forEachIndexed { i, num ->
+            val newCount = mutableMapOf<Int, Int>()
+            count.forEach { key, value ->
+                newCount[key + num] = newCount.getOrDefault(key + num, 0) + value
+                newCount[key - num] = newCount.getOrDefault(key - num, 0) + value
+            }
+            count = newCount
+        }
+        return count.getOrDefault(target, 0)
+    }
+}
+/*
 class Solution {
     lateinit private var nums: IntArray
     private var target: Int = 0
@@ -25,7 +36,6 @@ class Solution {
         this.nums = nums
         this.target = target
         val resultsCount = recurse(0, nums[0], 0) + recurse(0, nums[0]*(-1), 0 )
-        println(cacheMap.values)
         return resultsCount
     }
 
@@ -45,7 +55,7 @@ class Solution {
             return calculated
         } 
     }
-}
+}*/
 /*
 brute force
 class Solution {

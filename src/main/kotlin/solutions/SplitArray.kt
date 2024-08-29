@@ -15,6 +15,46 @@ class Solution {
     lateinit private var nums: IntArray
     var k: Int = -1
     fun splitArray(nums: IntArray, k: Int): Int {
+        var sum = 0
+        var max = Int.MIN_VALUE
+        nums.forEach {
+            sum += it
+            max = maxOf(it, max) 
+        }
+        var left = max
+        var right = sum
+        var result = right
+        while(left <= right) {
+            val mid = left + (right - left) / 2
+            if(canBeSplit(mid, nums,k)) {
+                result = mid
+                right = mid - 1
+            } else {
+                left = mid + 1
+            }
+        }
+        return result
+    }
+    private fun canBeSplit(maxSum: Int, nums: IntArray, k: Int): Boolean {
+        var sum = 0
+        var splits = 0
+        nums.forEachIndexed { i, _ ->
+            sum += nums[i]
+            if (sum > maxSum) {
+                splits++
+                sum = nums[i]
+            }
+        }
+        return splits + 1 <= k
+    }
+}
+
+/*
+Brute Force
+class Solution {
+    lateinit private var nums: IntArray
+    var k: Int = -1
+    fun splitArray(nums: IntArray, k: Int): Int {
         this.nums = nums
         this.k = k
         return recurse(0, emptyList())
@@ -46,4 +86,4 @@ class Solution {
     
         return subarrays.map { it.sum() }
     }
-}
+}*/

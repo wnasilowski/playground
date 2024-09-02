@@ -9,6 +9,29 @@ fun run() {
     println("result: $result")
 }
 
+
+class Solution {
+    fun longestCommonSubsequence(text1: String, text2: String): Int {
+        if (text1.length == 0 || text2.length == 0) {
+            return 0
+        }
+        val m = text1.length
+        val n = text2.length
+        val memo = Array(m+1) { IntArray(n+1) { 0 } }
+        text1.forEachIndexed { i, _ ->
+            text2.forEachIndexed { j, _ ->
+                memo[i+1][j+1] = if (text1[i] == text2[j]) {
+                    memo[i][j]+1
+                } else {
+                     maxOf(memo[i+1][j], memo[i][j+1])
+                }
+            }
+         }
+         return memo[m][n]
+    }
+}
+/*
+With memo
 class Solution {
     lateinit private var text1: String
     lateinit private var text2: String
@@ -39,3 +62,4 @@ class Solution {
         return result
     }
 }
+     */

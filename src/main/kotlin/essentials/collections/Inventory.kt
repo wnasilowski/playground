@@ -12,37 +12,38 @@ class Inventory {
     private val sellers = mutableSetOf<String>()
 
     fun addProduct(product: Product, producer: String) {
-        // TODO: Add product and assign producer
+        products.add(product)
+        productIdToProducer[product.id] = producer
     }
 
     fun removeProduct(product: Product) {
-        // TODO: Remove product and producer
+        products.remove(product)
+        productIdToProducer.remove(product.id)
     }
 
-    fun getProductsCount(): Int = TODO()
+    fun getProductsCount(): Int = products.size
 
-    fun hasProduct(product: Product): Boolean = TODO()
+    fun hasProduct(product: Product): Boolean = products.contains(product)
 
-    fun hasProducts(): Boolean = TODO()
+    fun hasProducts(): Boolean = products.isNotEmpty()
 
-    fun getProducer(product: Product): String? = TODO()
+    fun getProducer(product: Product): String? = productIdToProducer[product.id]
 
     fun addSeller(seller: String) {
-        // TODO: Add seller
+        sellers.add(seller)
     }
 
     fun removeSeller(seller: String) {
-        // TODO: Remove seller
+        sellers.remove(seller)
     }
 
     fun produceInventoryDisplay(): String {
         var result = "Inventory:\n"
-        // TODO: For each product, print name, category, price
-        // in the format "{name} ({category}) - ${price}"
-        // and print the producer in the format
-        // "Produced by: {producer}"
-        // TODO: Print sellers in the format
-        //  "Sellers: {sellers}"
+                products.forEach {
+                    result += "${it.name} (${it.category}) - ${it.price}\n" +
+                            "Produced by: ${productIdToProducer[it.id]}\n"
+                }
+        result += "Sellers: $sellers"
         return result
     }
 }

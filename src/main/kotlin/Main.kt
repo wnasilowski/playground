@@ -1,5 +1,5 @@
 package pl.wnasilowski
 
-fun main() {
-    solutions.letterdigits.run()
-  }
+suspend fun main() {
+  examples.coroutines.flow.main()
+}

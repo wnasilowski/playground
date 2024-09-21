@@ -1,6 +1,7 @@
 plugins {
-    kotlin("jvm") version "2.0.0"
-    id("application")
+    kotlin("jvm") version "2.0.10"
+    kotlin("plugin.power-assert") version "2.0.10"
+    application
 }
 
 group = "pl.wnasilowski"
@@ -9,7 +10,6 @@ version = "1.0-SNAPSHOT"
 repositories {
     mavenCentral()
 }
-val coroutinesVersion = "1.7.0"
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     testImplementation(kotlin("test"))
@@ -19,12 +19,14 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     implementation("com.sksamuel.aedile:aedile-core:1.3.1") // Needed for CompanyDetailsRepository
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
 }
 
-tasks.test {
-    useJUnitPlatform()
+java.sourceSets["test"].java {
+    srcDir("src/main/kotlin")
+}
+
+powerAssert {
+    functions = listOf("kotlin.assert", "kotlin.test.assertEquals")
 }
 
 application {

@@ -3,4 +3,5 @@
 - run main:
 gradle run
 - run test:
---tests gradle test "com.xyz.b.module.TestClass.testToRun"
+gradle test --tests 'functional.base.observable.*'
+gradle test --tests 'functional.base.*'

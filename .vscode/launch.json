@@ -5,16 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "kotlin",
-            "request": "launch",
-            "name": "Kotlin Launch",
-            "projectRoot": "${workspaceFolder}",
-            "mainClass": "pl/wnasilowski/MainKt",
-            "preLaunchTask": "assemble"
-        },
-        {
             "name": "Gradle run",
             "command": "gradle run",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+        {
+            "name": "Gradle test",
+            "command": "gradle test",
             "request": "launch",
             "type": "node-terminal"
         }

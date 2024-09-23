@@ -5,24 +5,20 @@ import org.junit.Test
 
 fun List<Student>.makeBestStudentsList(): String =
         filter { it.pointsInSemester >= 30 && it.result >= 80.0 }
-        .sortedByDescending { it.result }
-        .take(10)
-        .mapIndexed { i, student ->
-            student to mapIndexToMoney(i)
-         }
-         .sortedWith(compareBy({it.first.surname}, {it.first.name}))
-         .map {(student, money) ->
-            "${student.name} ${student.surname}, \$$money"
-         }
-        .joinToString(separator = "\n")
+                .sortedByDescending { it.result }
+                .take(10)
+                .mapIndexed { i, student -> student to mapIndexToMoney(i) }
+                .sortedWith(compareBy({ it.first.surname }, { it.first.name }))
+                .map { (student, money) -> "${student.name} ${student.surname}, \$$money" }
+                .joinToString(separator = "\n")
 
-        private fun mapIndexToMoney(ord: Int): Int = when {
+private fun mapIndexToMoney(ord: Int): Int =
+        when {
             ord == 0 -> 5000
             ord in 1..3 -> 3000
             ord in 4..9 -> 1000
             else -> error("Unexpected value")
-        } 
-
+        }
 
 data class Student(
         val name: String,

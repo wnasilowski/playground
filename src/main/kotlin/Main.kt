@@ -1,5 +1,5 @@
 package pl.wnasilowski
 
 suspend fun main() {
-  functional.base.inline.main()
+  functional.collections.map.main()
 }

@@ -35,7 +35,8 @@ inline fun <T> Iterable<T>.filter(predicate: (T) -> Boolean): List<T> {
 }
 
 inline fun <T, R> Iterable<T>.map(transformation: (T) -> R): List<R> {
-    val list = ArrayList<R>()
+    val size = (this as? Collection<T>)?.size ?: 10
+    val list = ArrayList<R>(size)
     for (elem in this) {
         list.add(transformation(elem))
     }

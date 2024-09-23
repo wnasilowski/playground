@@ -3,8 +3,14 @@ package functional.collections.plusat
 import org.junit.Test
 import kotlin.test.assertEquals
 
-fun <T> List<T>.plusAt(index: Int, element: T): List<T> {
-    TODO()
+fun <T> List<T>.plusAt(index: Int, element: T): List<T> = when {
+    index == 0 -> listOf(element) + this
+    index >= size - 1 -> this + listOf(element)
+    else -> { 
+        val left = slice(0 .. index-1)
+        val right = slice(index .. size-1)
+        left + listOf(element) + right 
+    }
 }
 
 fun main() {

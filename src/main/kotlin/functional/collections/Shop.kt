@@ -3,13 +3,26 @@ package functional.collections.shop
 import org.junit.Test
 import kotlin.test.assertEquals
 
-fun Shop.getWaitingCustomers(): List<Customer> = TODO()
+fun Shop.getWaitingCustomers(): List<Customer> = customers
+    .filter { customer ->
+        customer.orders.any {!it.isDelivered}
+    } 
 
-fun Shop.countProductSales(product: Product): Int = TODO()
+fun Shop.countProductSales(product: Product): Int = customers.flatMap { customer ->
+    customer.orders
+}
+.flatMap { order ->
+    order.products
+}
+.count { it == product }
 
 fun Shop.getCustomers(
     minAmount: Double,
-): List<Customer> = TODO()
+): List<Customer> = customers.filter {
+    it.orders.sumOf {
+        it.products.sumOf { it.price }
+    } >= minAmount
+}
 
 data class Shop(
     val name: String,

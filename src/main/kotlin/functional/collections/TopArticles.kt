@@ -6,9 +6,15 @@ import org.junit.Test
 class TopArticlesGenerator(
     private val articles: List<ArticleStatistics>,
 ) {
-    fun topArticles(n: Int): List<ArticleStatistics> = TODO()
+    fun topArticles(n: Int): List<ArticleStatistics> = articles
+    .withIndex()
+    .sortedByDescending { (_, article) ->
+        article.views
+    }
+    .take(n)
+    .sortedBy {(index, _) -> index}
+    .map {(_, article) -> article}
 }
-
 data class ArticleStatistics(
     val title: String,
     val views: Long,
@@ -26,6 +32,7 @@ fun main() {
         )
     )
     val topArticles = generator.topArticles(3)
+
     topArticles.onEach { println(it) }
     // ArticleStatistics(title=Article 1, views=400)
     // ArticleStatistics(title=Article 4, views=300)

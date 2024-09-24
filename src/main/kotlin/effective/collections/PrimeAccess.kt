@@ -6,13 +6,21 @@ import kotlin.system.measureTimeMillis
 class PrimeAccessRepository(
     private val primeAccessList: PrimeAccessList
 ) {
-    fun isOnAllowList(userId: String): Boolean = TODO()
-    fun isOnDenyList(userId: String): Boolean = TODO()
+    fun isOnAllowList(userId: String): Boolean = primeAccessList.allow[userId] == true
+    
+    fun isOnDenyList(userId: String): Boolean = primeAccessList.deny[userId] == true
 }
 
 class PrimeAccessList(
     val entries: List<PrimeAccessEntry>
-)
+) {
+    val allow = entries.associateBy ({
+        it.userId
+    }, {it.allowList})
+    val deny = entries.associateBy ({
+        it.userId
+    }, {it.denyList})
+}
 
 class PrimeAccessEntry(
     val userId: String,

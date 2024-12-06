@@ -6,7 +6,10 @@ import kotlin.test.assertEquals
 // Powerset returns set of all subsets including full set and empty set
 // https://en.wikipedia.org/wiki/Power_set
 fun <T> Collection<T>.powerset(): Set<Set<T>> {
-    TODO()
+    if (this.isEmpty()) return setOf(setOf())
+    val element = this.first()
+    val rest = this.drop(1).powerset()
+    return rest + rest.map { it + element }
 }
 
 fun main() {

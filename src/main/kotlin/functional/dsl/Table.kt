@@ -3,37 +3,53 @@ package functional.dsl.table
 import org.junit.Test
 import kotlin.test.assertEquals
 
-//fun createTable(): TableBuilder = table {
-//    tr {
-//        td { +"A" }
-//        td { +"B" }
-//    }
-//    tr {
-//        td { +"C" }
-//        td { +"D" }
-//    }
-//}
+fun createTable(): TableBuilder = table {
+    tr {
+        td { +"A" }
+        td { +"B" }
+    }
+    tr {
+        td { +"C" }
+        td { +"D" }
+    }
+}
+
+fun table(init: TableBuilder.() -> Unit): TableBuilder =
+    TableBuilder().apply(init)
 
 data class TableBuilder(
     var trs: List<TrBuilder> = emptyList()
 ) {
     override fun toString(): String =
         "<table>${trs.joinToString(separator = "")}</table>"
+
+    fun tr(init: TrBuilder.() -> Unit) {
+        trs += TrBuilder().apply(init)
+    }
+
 }
 data class TrBuilder(
     var tds: List<TdBuilder> = emptyList()
 ) {
+    fun td(init: TdBuilder.() -> Unit) {
+        tds += TdBuilder().apply(init)
+    }
+
     override fun toString(): String =
         "<tr>${tds.joinToString(separator = "")}</tr>"
 }
 data class TdBuilder(
     var text: String = ""
 ) {
+    operator fun String.unaryPlus() {
+        text += this
+    }
+
     override fun toString(): String = "<td>$text</td>"
 }
 
 fun main() {
-    // println(createTable()) //<table><tr><td>This is row 1</td><td>This is row 2</td></tr></table>
+     println(createTable()) //<table><tr><td>This is row 1</td><td>This is row 2</td></tr></table>
 }
 
 class HtmlDslTest {

@@ -1,3 +1,7 @@
+@file:Suppress("OPT_IN_USAGE")
+
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     kotlin("jvm") version "2.0.10"
     kotlin("plugin.power-assert") version "2.0.10"
@@ -27,6 +31,10 @@ java.sourceSets["test"].java {
 
 powerAssert {
     functions = listOf("kotlin.assert", "kotlin.test.assertEquals")
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions.freeCompilerArgs = listOf("-Xcontext-receivers", "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi")
 }
 
 application {

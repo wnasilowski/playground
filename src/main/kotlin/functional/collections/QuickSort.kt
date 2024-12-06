@@ -7,7 +7,13 @@ import kotlin.test.assertEquals
 // TODO: Quick sort should take first element (pivot), then split rest to bigger than pivot and smaller and finally return
 //  first smaller sorted, then pivot and finally bigger sorted
 fun <T : Comparable<T>> List<T>.quickSort(): List<T> {
-    TODO()
+    if (size < 2) {
+        return this
+    }
+    val pivot = random()
+    val smaller = filter { it <= pivot}
+    val bigger = filter { it > pivot }
+    return smaller.quickSort() + bigger.quickSort()
 }
 
 class QuickSortTest {

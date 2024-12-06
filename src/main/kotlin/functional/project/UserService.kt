@@ -20,39 +20,92 @@ class UserService(
     // and load function to load user by id from userRepository,
     // also loaded user should be stored in userByKeyCache
     private val userByIdCache: Cache<String, User> = cache {
-        // TODO
+        clearAfterRead = 1.minutes
+        clearAfterWrite = 1.minutes
+        load { id: String ->
+            userRepository.getUser(id)
+                ?.toUser()
+                ?.also { userByKeyCache.store(it.key, it) }
+        }
     }
 
     // Cache definition, that should set clearAfterWrite and clearAfterRead both to 1 minute,
     // and load function to load user by key from userRepository,
     // also loaded user should be stored in userByIdCache
     private val userByKeyCache: Cache<String, User> = cache {
-        // TODO
+        clearAfterRead = 1.minutes
+        clearAfterWrite = 1.minutes
+        load {
+            userRepository.getUserByKey(it)?.toUser()
+                ?.also { user ->
+                    userByIdCache.store(it, user)
+                }
+        }
     }
 
     // Should get user from cache
-    fun getUser(id: String): User? = TODO()
+    fun getUser(id: String): User? = userByIdCache.get(id)
 
     // Should get user from cache
-    fun getUserByKey(key: String): User? = TODO()
+    fun getUserByKey(key: String): User? = userByKeyCache.get(key)
 
     // Should load user from repository, and if password matches, 
     // create, token and return it,
     // otherwise throw error with message "Wrong email or password"
-    fun getToken(email: String, passwordHash: String): String = TODO()
-
+    fun getToken(email: String, passwordHash: String): String = userRepository
+        .getUserByEmail(email)
+        ?.takeIf {  it.passwordHash == passwordHash}
+        ?.let {
+            tokenRepository.createToken(it.id, it.isAdmin)
+        } ?: error("Wrong email or password")
     // Should update user in repository, and clear cache
     // should log "User updated: $user"
     // in case of user not found, should throw error with the message "User not found"
-    fun updateUser(token: String, userPatch: UserPatch): User = TODO()
+    fun updateUser(token: String, userPatch: UserPatch): User = tokenRepository.getUserId(token)
+        ?.let { userRepository.getUser(it) }
+        ?.let { userDto ->
+            userDto.copy(
+                email = userPatch.email ?: userDto.email,
+                name = userPatch.name ?: userDto.name,
+                surname = userPatch.surname ?: userDto.surname,
+            )
+        }
+        ?.also {
+            userRepository.updateUser(it)
+            userByIdCache.remove(it.id)
+            userByKeyCache.remove(it.key)
+            logger.log("User updated: $it")
+        }
+        ?.toUser()
+        ?: error("User not found")
 
     // Should add user to repository if token belongs to admin,
     // should log "User added: $user"
-    fun addUser(token: String, addUser: AddUser): User = TODO()
+    fun addUser(token: String, addUser: AddUser): User = tokenRepository.isAdmin(token)
+        .takeIf { it }
+        ?.let {
+            userDtoFactory.produceUserDto(addUser)
+        }
+        ?.also { userRepository.addUser(it) }
+        ?.toUser()
+        ?.also {
+            logger.log("User added: $it")
+        }
+        ?: error("Only admin can add users")
 
     // Should return statistics about users
     // in case of token not belonging to admin, should throw error with the message "Only admin can get statistics"
-    fun userStatistics(token: String): UserStatistics = TODO()
+    fun userStatistics(token: String): UserStatistics = tokenRepository.isAdmin(token)
+        .takeIf { it }
+        ?.let {
+            UserStatistics(
+                numberOfUsersCreatedEachDay = userRepository
+                    .getAllUsers()
+                    .groupingBy { it.creationTime.toLocalDate() }
+                    .eachCount()
+            )
+        }
+        ?: error("Only admin can get statistics")
 
     fun clearCache() {
         userByIdCache.clear()

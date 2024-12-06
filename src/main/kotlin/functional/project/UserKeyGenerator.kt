@@ -25,8 +25,30 @@ class RealUserKeyGenerator(
     // Should trim the key.
     // Should return null if the key is shorter than 4 characters.
     // Should return null if key already exists in the database.
-    override fun findPublicKey(name: String, surname: String): String? = TODO()
+    override fun findPublicKey(name: String, surname: String): String? =
+        getCandidates(name, surname).map {
+            it.cleanKey()
+        }.filter {
+            it.length >= 4
+        }.firstOrNull {
+            userRepository.getUserByKey(it) == null
+        }
 }
+
+private fun getCandidates(name: String, surname: String): List<String> =
+    listOf(
+        name + surname,
+        surname + name,
+        name + surname.first(),
+        name.first() + surname,
+        surname + name.first(),
+        surname.first() + name,
+    )
+
+private fun String.cleanKey() = filter { it.isLetterOrDigit() }
+    .lowercase()
+    .trim()
+
 
 class FakeUserKeyGenerator : UserKeyGenerator {
     var constantKey: String? = null

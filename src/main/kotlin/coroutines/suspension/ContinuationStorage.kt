@@ -16,7 +16,10 @@ var continuation: Continuation<String>? = null
 
 suspend fun continuationSteal(console: Console) {
     console.println("Before")
-    // TODO
+    val result = suspendCancellableCoroutine {
+        continuation = it
+    }
+    console.println(result)
     console.println("After")
 }
 

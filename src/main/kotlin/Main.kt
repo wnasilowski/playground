@@ -1,5 +1,5 @@
 package pl.wnasilowski
 
 suspend fun main() {
-  functional.collections.toparticles.main()
+  aoc.day6.main()
 }
